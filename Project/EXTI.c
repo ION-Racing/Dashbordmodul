@@ -59,28 +59,27 @@ the problem in a different manner.
 */
 
 void EXTI9_5_IRQHandler(void) {
-	
-			__disable_irq();
-		//Wheelsensor interrupt action
-     if (EXTI_GetITStatus(EXTI_Line9) != RESET) 	//Wheel sensor IT?
-			 { 
-				 if(wheel.state1 == TRIGGER1){						// First trigger?											
-					wp_temp1 = TIM2->CNT; 									// Set reference time of first trigger
-					wheel.state1 = TRIGGER2;								// Ready for state 2.
-				 }else{																		// Or second trigger..
-					wheel.period1 = TIM2->CNT - wp_temp1;		// Calculate time difference of trigger 1 and 2.
-					wheel.state1 = TRIGGER1;								// Ready or state 1.												
-				 }
+	__disable_irq();
+	//Wheelsensor interrupt action
+	if (EXTI_GetITStatus(EXTI_Line9) != RESET) 	
+		{ 
+			if(wheel.state1 == TRIGGER1){																	
+				wp_temp1 = TIM2->CNT; 									
+				wheel.state1 = TRIGGER2;								
+				}else{
+					wheel.period1 = TIM2->CNT - wp_temp1;		
+					wheel.state1 = TRIGGER1;																			
+				}
         EXTI_ClearITPendingBit(EXTI_Line9);
-    }
+		}
 			 
 			//Start button interrupt action
-			if (EXTI_GetITStatus(EXTI_Line7) != RESET)
-			{
-				if (button_start_state == 0)
+	if (EXTI_GetITStatus(EXTI_Line7) != RESET)
+		{
+			if (button_start_state == 0)
 				{
-				button_start_t1 = TIM2->CNT;
-				button_start_state = 1;
+					button_start_t1 = TIM2->CNT;
+					button_start_state = 1;
 				}else{
 					if(TIM2->CNT - button_start_t1 > debounceTime)
 						{
@@ -89,20 +88,22 @@ void EXTI9_5_IRQHandler(void) {
 						button_start_state = 0;
 				}
 				EXTI_ClearITPendingBit(EXTI_Line7);
-			}
+		}
 			
 			//STOP button action
-		if (EXTI_GetITStatus(EXTI_Line8) != RESET){
-					if (button_stop_state == 0)
-				{
+		
+	if (EXTI_GetITStatus(EXTI_Line8) != RESET)
+		{
+		if (button_stop_state == 0)
+			{
 				button_stop_t1 = TIM2->CNT;
 				button_stop_state = 1;
 				}else{
-					if(TIM2->CNT - button_stop_t1 > debounceTime)
-						{
-							stop_button_pushed = 1;
-						}
-						button_stop_state = 0;
+				if(TIM2->CNT - button_stop_t1 > debounceTime)
+					{
+						stop_button_pushed = 1;
+					}
+					button_stop_state = 0;
 				}
 			EXTI_ClearITPendingBit(EXTI_Line8);
 		}
@@ -112,18 +113,17 @@ void EXTI9_5_IRQHandler(void) {
 /* Handle PB12 interrupt */
 void EXTI15_10_IRQHandler(void) {
 	
-	
-			__disable_irq();
-     if (EXTI_GetITStatus(EXTI_Line10) != RESET)	//Wheel sensor IT?
-			 { 
-				 if(wheel.state2 == TRIGGER1){						// First trigger?											
-					wp_temp2 = TIM2->CNT; 									// Set reference time of first trigger
-					wheel.state2 = TRIGGER2;								// Ready for state 2.
-				 }else{																		// Or second trigger..
-					wheel.period2 = TIM2->CNT - wp_temp2;		// Calculate time difference of trigger 1 and 2.
-					wheel.state2 = TRIGGER1;								// Ready or state 1.												
-				 }
-        EXTI_ClearITPendingBit(EXTI_Line10);
-    } 
+	__disable_irq();
+	if (EXTI_GetITStatus(EXTI_Line10) != RESET)	
+		{ 
+			if(wheel.state2 == TRIGGER1){																	
+				wp_temp2 = TIM2->CNT; 									
+				wheel.state2 = TRIGGER2;								
+				}else{																		
+					wheel.period2 = TIM2->CNT - wp_temp2;		
+					wheel.state2 = TRIGGER1;																		
+				}
+				EXTI_ClearITPendingBit(EXTI_Line10);
+		} 
 		__enable_irq();			
 }
