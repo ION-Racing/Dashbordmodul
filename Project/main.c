@@ -7,7 +7,6 @@
 #include "EXTI.h"
 #include "TIM.h"
 #include "Global_variables.h"
-#include "math.h"
 #include "systick.h"
 #include "watchdog.h"
 #include "CAN_messages.h"
@@ -52,7 +51,6 @@ int main(void)
 	InitNVIC();
 	InitTim();
 	InitSystick();
-	initWatchdogCAN();
 	//InitWatchdog(); //Disable watchdog while debugging.
 	
 	/* 
@@ -75,8 +73,6 @@ int main(void)
 		if(newButtonPush(GPIO_Pin_7)){
 		GPIOA->ODR ^= GPIO_Pin_4;
 		}
-		
-		//if message recived -> parse...
 	} //END while1
 }	//END Main
 

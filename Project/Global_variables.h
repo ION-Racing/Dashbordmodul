@@ -30,22 +30,6 @@ typedef struct{
 
 
 extern wheeld wheel;
-
-/*
-struct for CAN ECHO/Watchdog state.
-1 if echo recived.
-*/
-typedef struct{
-	uint8_t ECU		;	// Engine control unit echo recived 
-	uint8_t RPIU	; // Raspberry unit pi echo recived
-	uint8_t DU		;	// Dashbord unit echo recived
-	uint8_t PU		;	// Pedalbox unit echo recived
-	uint8_t isSent;	// 1 : waiting for echo. 0 : not expecting echo.
-}CANechod;
-
-extern CANechod CANecho;
-
-
 /*
 Struct for recived can messages.
 */

@@ -423,11 +423,6 @@
               <FileType>1</FileType>
               <FilePath>.\HMI_Buttons.c</FilePath>
             </File>
-            <File>
-              <FileName>ringbuffer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\ringbuffer.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
