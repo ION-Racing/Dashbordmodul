@@ -13,8 +13,6 @@ CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 CanTxMsg TxMessage; //Used for testing
 
 
-extern CanRxMsg msgRx;
-
 void InitCAN(void)
 {
 	// Setup CAN Pins
@@ -67,32 +65,23 @@ void InitCAN(void)
 	CAN_FilterInitStructure.CAN_FilterActivation = ENABLE;
 	CAN_FilterInit(&CAN_FilterInitStructure);
 
-	/* Transmit Structure preparation */
-	TxMessage.StdId = 0x321;
-	TxMessage.ExtId = 0x01;
-	TxMessage.RTR = CAN_RTR_DATA;
-	TxMessage.IDE = CAN_ID_STD;
-	TxMessage.DLC = 1;
-
 	/* Enable FIFO 0 message pending Interrupt */
 	CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
-	
-	
-	Init_RxMes(&msgRx);
 }
 
 /*
 CAN RX Interrupt
 */
-void CAN1_RX0_IRQHandler (void)
-{
+
+CanRxMsg msgRx;
+
+void CAN1_RX0_IRQHandler (void){
 	__disable_irq();
-	if (CAN_GetITStatus(CAN1,CAN_IT_FMP0) != RESET)
-		{
-			CANparseMessage(CAN_FIFO0);
-			RxCAN.FIFO0 = SET;
-			GPIOA->ODR ^= GPIO_Pin_5;
-			
-		}
-		__enable_irq();
+	if(CAN1->RF0R & CAN_RF0R_FMP0)
+	{
+		CAN_Receive(CAN1, CAN_FIFO0, &msgRx);
+		
+	}
+	__enable_irq();
 }
+

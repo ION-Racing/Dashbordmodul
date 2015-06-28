@@ -10,9 +10,10 @@ uint8_t CANTx(uint32_t address, uint8_t length, uint8_t data[8]);
 /*
 CAN Transmit
 */
-uint8_t CANTx(uint32_t address, uint8_t length, uint8_t data[8]) {
+CanTxMsg msg;
 	
-	CanTxMsg msg;	  
+uint8_t CANTx(uint32_t address, uint8_t length, uint8_t data[8])
+{
 	msg.StdId 	= address;
 	msg.IDE 	= CAN_Id_Standard;
 	msg.RTR		= CAN_RTR_Data;
@@ -24,23 +25,4 @@ uint8_t CANTx(uint32_t address, uint8_t length, uint8_t data[8]) {
 	}
 
 	return CAN_Transmit(CAN1, &msg);
-}
-
-
-/*
-CAN Receive
-*/
-void Init_RxMes(CanRxMsg *RxMessage)
-{
-	uint8_t ubCounter = 0;
-
-	RxMessage->StdId = 0x00;
-	RxMessage->ExtId = 0x00;
-	RxMessage->IDE = CAN_ID_STD;
-	RxMessage->DLC = 0;
-	RxMessage->FMI = 0;
-	for (ubCounter = 0; ubCounter < 8; ubCounter++)
-	{
-		RxMessage->Data[ubCounter] = 0x00;
-	}
 }

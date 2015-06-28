@@ -11,12 +11,11 @@
 #include "watchdog.h"
 #include "CAN_messages.h"
 #include "CAN_functions.h"
+#include "HMI_Buttons.h"
 
 
 //Macros
 #define ACK 1
-#define START_BUTTON GPIO_Pin_7
-#define STOP_BUTTON GPIO_Pin_8
 
 //function declerations
 void TxWheelrpm(CanTxMsg);
@@ -26,16 +25,12 @@ uint8_t newButtonPush(uint16_t);
 //Variable declerations
 wheeld wheel;
 RxCANd RxCAN;
-CanTxMsg TxMsg;	  
-CanRxMsg msgRx;
+CanTxMsg TxMsg;
 uint8_t wdResetState;
 uint8_t start_ack=0;
 
 int main(void)
-{	
-	/*
-	Initalize and configure periphermodules and system.
-	*/
+{
 	// Configure the system clock.
 	// The system clock is 168Mhz.
 	RCC_HSEConfig(RCC_HSE_ON); // ENABLE HSE (HSE = 8Mhz)
@@ -47,11 +42,14 @@ int main(void)
 	// Initialize peripheral modules
 	InitCAN();
 	InitGPIO();
+	InitButtons();
 	InitEXTI();
 	InitNVIC();
 	InitTim();
 	InitSystick();
 	//InitWatchdog(); //Disable watchdog while debugging.
+	
+	
 	
 	/* 
 	Check if the IWDG reset has occoured
@@ -67,14 +65,10 @@ int main(void)
 	while(1)
 	{ 	
 		if(clk10msWheel == COMPLETE){
-		TxWheelrpm(TxMsg);
-		clk10msWheel = RESTART;
+			TxWheelrpm(TxMsg);
+			clk10msWheel = RESTART;
 		}
-		if(newButtonPush(GPIO_Pin_7)){
-		GPIOA->ODR ^= GPIO_Pin_4;
-		}
-	} //END while1
-}	//END Main
-
-
-
+		
+		checkButtons();
+	}
+}

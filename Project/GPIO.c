@@ -39,9 +39,9 @@ void InitGPIO(void)
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 	GPIO_Init(GPIOD, &GPIO_InitStructure);
 	
-		/* Configure GPIOD as inputs:
+	/*  Configure GPIOD as inputs:
 		PE7	: START button	: NO
-		PE8	:	STOP 	button	: NC
+		PE8	: STOP 	button	: NC
 	*/
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;

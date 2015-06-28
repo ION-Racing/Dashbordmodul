@@ -11,8 +11,7 @@ in EXTI.C.
 1 for valid button push
 0 for no button push
 */
-extern uint8_t start_button_pushed;   
-extern uint8_t stop_button_pushed;
+extern uint8_t buttonState[2];
 
 /*
 state of the can bus echo

@@ -49,4 +49,3 @@ void TxWheelrpm(CanTxMsg msg)
 			return 0;
 		}else return 1000000/period; // f*1000 = (1/t[us])*1000
 	}
-	
