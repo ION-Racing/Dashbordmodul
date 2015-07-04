@@ -32,7 +32,7 @@ int main(void)
 	InitNVIC();
 	InitTim();
 	InitSystick();
-	//InitWatchdog();
+	InitWatchdog();
 	
 	/* 
 	Check if the IWDG reset has occoured
