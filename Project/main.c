@@ -1,4 +1,3 @@
-//includes
 #include "stm32f4xx.h"
 #include "stm32f4xx_GPIO.h"
 #include "GPIO.h"
@@ -9,25 +8,11 @@
 #include "Global_variables.h"
 #include "systick.h"
 #include "watchdog.h"
-#include "CAN_messages.h"
-#include "CAN_functions.h"
 #include "HMI_Buttons.h"
+#include "Wheelsensor.h"
 
-
-//Macros
-#define ACK 1
-
-//function declerations
-void TxWheelrpm(CanTxMsg);
-uint32_t calculateRpm(uint32_t);
-uint8_t newButtonPush(uint16_t);
-
-//Variable declerations
 wheeld wheel;
-RxCANd RxCAN;
-CanTxMsg TxMsg;
 uint8_t wdResetState;
-uint8_t start_ack=0;
 
 int main(void)
 {
@@ -47,28 +32,26 @@ int main(void)
 	InitNVIC();
 	InitTim();
 	InitSystick();
-	//InitWatchdog(); //Disable watchdog while debugging.
-	
-	
+	//InitWatchdog();
 	
 	/* 
 	Check if the IWDG reset has occoured
 	*/
-	if(RCC_GetFlagStatus(RCC_FLAG_IWDGRST) == SET){
+	/*if(RCC_GetFlagStatus(RCC_FLAG_IWDGRST) == SET){
 		GPIOA->ODR |= GPIO_Pin_6; //temp action
 		RCC_ClearFlag();
-	}
+	}*/
 	
-	/*
-	Main code
-	*/
 	while(1)
 	{ 	
 		if(clk10msWheel == COMPLETE){
-			TxWheelrpm(TxMsg);
+			TxWheelrpm();
 			clk10msWheel = RESTART;
 		}
 		
 		checkButtons();
+		
+		LED_SetState(LED_GREEN, (GPIOE->IDR & BUTTON_START_GPIO_PIN) ? DISABLE : ENABLE);
+		LED_SetState(LED_RED,   (GPIOE->IDR & BUTTON_STOP_GPIO_PIN)  ? ENABLE : DISABLE);
 	}
 }

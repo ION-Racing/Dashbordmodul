@@ -2,16 +2,10 @@
 #include "stm32f4xx_gpio.h"
 #include "Periph_header.h"
 #include "Global_variables.h"
-#include "CAN_functions.h"
+#include "CAN.h"
 
 #define CAN_RX_PIN GPIO_Pin_11
 #define CAN_TX_PIN GPIO_Pin_12
-
-/* PRIVATE functions */
-CAN_InitTypeDef        CAN_InitStructure;
-CAN_FilterInitTypeDef  CAN_FilterInitStructure;
-CanTxMsg TxMessage; //Used for testing
-
 
 void InitCAN(void)
 {
@@ -38,6 +32,7 @@ void InitCAN(void)
 	CAN_DeInit(CAN1);
 
 	/* CAN cell init */
+	CAN_InitTypeDef        CAN_InitStructure;
 	CAN_InitStructure.CAN_TTCM = DISABLE;
 	CAN_InitStructure.CAN_ABOM = DISABLE;
 	CAN_InitStructure.CAN_AWUM = DISABLE;
@@ -54,6 +49,7 @@ void InitCAN(void)
 	CAN_Init(CAN1, &CAN_InitStructure);
 
 	/* CAN filter init */
+	CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 	CAN_FilterInitStructure.CAN_FilterNumber = 0;
 	CAN_FilterInitStructure.CAN_FilterMode = CAN_FilterMode_IdMask;
 	CAN_FilterInitStructure.CAN_FilterScale = CAN_FilterScale_32bit;
@@ -68,6 +64,26 @@ void InitCAN(void)
 	/* Enable FIFO 0 message pending Interrupt */
 	CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
 }
+
+
+// CAN Transmit
+CanTxMsg msg;	
+
+uint8_t CANTx(uint32_t address, uint8_t length, uint8_t data[8])
+{
+	msg.StdId 	= address;
+	msg.IDE 	= CAN_Id_Standard;
+	msg.RTR		= CAN_RTR_Data;
+	msg.DLC		= length;
+	
+	uint8_t i = 0;
+	for(i=0; i<length; i++){
+		msg.Data[i] = data[i];
+	}
+
+	return CAN_Transmit(CAN1, &msg);
+}
+
 
 /*
 CAN RX Interrupt

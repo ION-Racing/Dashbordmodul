@@ -349,7 +349,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -432,11 +432,6 @@
         <Group>
           <GroupName>Include</GroupName>
           <Files>
-            <File>
-              <FileName>CAN_messages.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CAN_messages.h</FilePath>
-            </File>
             <File>
               <FileName>Global_variables.h</FileName>
               <FileType>5</FileType>
@@ -666,11 +661,6 @@
               <FileName>CAN.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\CAN.c</FilePath>
-            </File>
-            <File>
-              <FileName>CAN_functions.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CAN_functions.c</FilePath>
             </File>
           </Files>
         </Group>

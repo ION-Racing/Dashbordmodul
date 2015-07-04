@@ -69,29 +69,16 @@ void EXTI9_5_IRQHandler(void)
 			wheel.period1 = TIM2->CNT - wp_temp1;		
 			wheel.state1 = TRIGGER1;																			
 		}
+		
+		GPIOA->ODR ^= GPIO_Pin_4; // Toggle blue LED
+		
 		EXTI_ClearITPendingBit(EXTI_Line9);
 	}
 			 
-	// START Button
+	// STOP Button
 	if (EXTI_GetITStatus(EXTI_Line7) != RESET)
 	{
-		if (!(GPIOE->IDR & BUTTON_START_GPIO_PIN))
-		{
-			button_start_t1 = TIM2->CNT;
-		}
-		else {
-			if(TIM2->CNT - button_start_t1 > debounceTime)
-			{
-				buttonState[BUTTON_START] = BUTTON_PUSHED;
-			}
-		}
-		EXTI_ClearITPendingBit(EXTI_Line7);
-	}
-			
-	// STOP button	
-	if (EXTI_GetITStatus(EXTI_Line8) != RESET)
-	{
-		if ((GPIOE->IDR & BUTTON_STOP_GPIO_PIN))
+		if (!(GPIOE->IDR & BUTTON_STOP_GPIO_PIN))
 		{
 			button_stop_t1 = TIM2->CNT;
 		}
@@ -101,6 +88,23 @@ void EXTI9_5_IRQHandler(void)
 				buttonState[BUTTON_STOP] = BUTTON_PUSHED;
 			}
 		}
+		EXTI_ClearITPendingBit(EXTI_Line7);
+	}
+			
+	// START button	
+	if (EXTI_GetITStatus(EXTI_Line8) != RESET)
+	{
+		if ((GPIOE->IDR & BUTTON_START_GPIO_PIN))
+		{
+			button_start_t1 = TIM2->CNT;
+		}
+		else {
+			if(TIM2->CNT - button_start_t1 > debounceTime)
+			{
+				buttonState[BUTTON_START] = BUTTON_PUSHED;
+			}
+		}
+		
 		EXTI_ClearITPendingBit(EXTI_Line8);
 	}
 
@@ -122,6 +126,9 @@ void EXTI15_10_IRQHandler(void)
 			wheel.period2 = TIM2->CNT - wp_temp2;		
 			wheel.state2 = TRIGGER1;																		
 		}
+		
+		GPIOA->ODR ^= GPIO_Pin_4; // Toggle blue LED
+		
 		EXTI_ClearITPendingBit(EXTI_Line10);
 	} 
 	__enable_irq();			

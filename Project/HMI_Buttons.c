@@ -6,16 +6,14 @@
 
 uint8_t buttonState[2];
 
-uint8_t data[1];
-
 void InitButtons(void){
-	
-	data[0] = 1;
 	 
 	for(uint8_t i = 0; i<2; i++){
 		buttonState[i] = BUTTON_RELEASED;
 	}
 }
+
+uint8_t data[1] = {1};
 
 void checkButtons(void){
 	

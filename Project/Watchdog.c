@@ -1,8 +1,6 @@
 #include <stm32f4xx.h>
 #include "watchdog.h"
 #include "Global_variables.h"
-#include "CAN_functions.h"
-#include "CAN_messages.h"
 
 /*
 Configuration of the independent watchdog.
